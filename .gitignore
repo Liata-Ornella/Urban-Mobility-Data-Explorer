@@ -5,3 +5,6 @@ video/
 data/
 *.csv
 *.pdf
+.vscode/
+__pycache__/
+.env
