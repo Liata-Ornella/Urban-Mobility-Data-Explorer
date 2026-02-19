@@ -1,6 +1,6 @@
-let chartInstances = {};
+﻿var chartInstances = {};
 
-const CHART_COLORS = {
+var CHART_COLORS = {
     green: '#b8e468',
     greenBg: 'rgba(184,228,104,0.5)',
     coral: '#f0a898',
@@ -21,8 +21,8 @@ const CHART_COLORS = {
     grid: 'rgba(0,0,0,0.04)'
 };
 
-const CHART_FONT = { family: 'Plus Jakarta Sans', size: 11, weight: '500' };
-const MONO_FONT = { family: 'JetBrains Mono', size: 10 };
+var CHART_FONT = { family: 'Plus Jakarta Sans', size: 11, weight: '500' };
+var MONO_FONT = { family: 'JetBrains Mono', size: 10 };
 
 function destroyChart(key) {
     if (chartInstances[key]) {
@@ -355,8 +355,8 @@ function renderHeatmap(data) {
             cell.style.background = `rgb(${r},${g},${b})`;
 
             const tip = document.createElement('div');
-            tip.className = 'tip';
-            tip.textContent = `${DAYS[d]} ${h}:00 — ${grid[d][h]} trips`;
+            tip.className = 'hm-tip';
+            tip.textContent = `${DAYS[d]} ${h}:00 â€” ${grid[d][h]} trips`;
             cell.appendChild(tip);
             container.appendChild(cell);
         }
