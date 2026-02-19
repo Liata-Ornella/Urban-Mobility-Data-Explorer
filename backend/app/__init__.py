@@ -4,6 +4,8 @@ from config import Config
 from app.extensions import db
 from flask_cors import CORS
 from flasgger import Swagger
+from dotenv import load_dotenv
+import os
 
 migrate = Migrate()
 swagger = Swagger()
@@ -11,6 +13,9 @@ swagger = Swagger()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    load_dotenv()
+    
+    print("db", os.environ.get("DB_TYPE"))
     
     CORS(app)
     
