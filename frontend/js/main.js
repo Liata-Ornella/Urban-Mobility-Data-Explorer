@@ -50,9 +50,9 @@ function updateSummaryMetrics(data) {
         return;
     }
 
-    const avgSpeed = (data.reduce((sum, t) => sum + t.speed_kmh, 0) / data.length).toFixed(1);
-    const avgDuration = (data.reduce((sum, t) => sum + t.duration_minutes, 0) / data.length).toFixed(1);
-    const avgDistance = (data.reduce((sum, t) => sum + t.distance_km, 0) / data.length).toFixed(1);
+    const avgSpeed = (data.reduce((sum, t) => sum + (t.trip_speed_mph || t.speed_kmh || 0), 0) / data.length).toFixed(1);
+    const avgDuration = (data.reduce((sum, t) => sum + (t.trip_duration_minutes || t.duration_minutes || 0), 0) / data.length).toFixed(1);
+    const avgDistance = (data.reduce((sum, t) => sum + (t.trip_distance || t.distance_km || 0), 0) / data.length).toFixed(1);
 
     document.getElementById("metricAvgSpeed").innerText = avgSpeed;
     document.getElementById("metricAvgDuration").innerText = avgDuration;
@@ -73,16 +73,19 @@ function renderLongestTrips(data) {
     emptyMessage.style.display = "none";
 
     const longestTrips = [...data]
-        .sort((a, b) => b.duration_minutes - a.duration_minutes)
+        .sort((a, b) => (b.trip_duration_minutes || b.duration_minutes || 0) - (a.trip_duration_minutes || a.duration_minutes || 0))
         .slice(0, 5);
 
     longestTrips.forEach(trip => {
+        const duration = (trip.trip_duration_minutes || trip.duration_minutes || 0).toFixed(1);
+        const distance = (trip.trip_distance || trip.distance_km || 0).toFixed(2);
+        const speed = (trip.trip_speed_mph || trip.speed_kmh || 0).toFixed(1);
         const row = `
             <tr>
                 <td>${trip.id}</td>
-                <td>${trip.duration_minutes.toFixed(1)}</td>
-                <td>${trip.distance_km.toFixed(2)}</td>
-                <td>${trip.speed_kmh.toFixed(1)}</td>
+                <td>${duration}</td>
+                <td>${distance}</td>
+                <td>${speed}</td>
                 <td>${trip.passenger_count}</td>
                 <td>${trip.vendor_id}</td>
             </tr>
@@ -94,11 +97,57 @@ function renderLongestTrips(data) {
 document.getElementById("applyFiltersBtn").addEventListener("click", () => {
     const filteredTrips = applyFilters();
     renderDashboard(filteredTrips);
+    renderExtraCharts(filteredTrips);
 });
 
 document.getElementById("exportCsvBtn").addEventListener("click", () => {
     const filteredTrips = applyFilters();
     downloadCSV(filteredTrips);
 });
+const API_BASE = 'http://127.0.0.1:5000';
 
-fetchTrips();
+let zonesMap = {};
+
+async function fetchZones() {
+    try {
+        const res = await fetch(`${API_BASE}/api/zones/`);
+        const data = await res.json();
+        if (data.zones) {
+            data.zones.forEach(z => {
+                zonesMap[z.location_id] = z;
+            });
+        }
+    } catch (err) {
+        console.warn('Could not fetch zones:', err);
+    }
+}
+
+function renderExtraCharts(data) {
+    renderBoroughChart(data, zonesMap);
+    renderPaymentChart(data);
+    renderHourlyChart(data);
+    renderFareDistanceChart(data);
+    renderHeatmap(data);
+}
+
+async function initDashboard() {
+    try {
+        await fetchZones();
+
+        const res = await fetch(`${API_BASE}/api/trips/?per_page=1000`);
+        const data = await res.json();
+
+        if (data.trips && data.trips.length > 0) {
+            allTrips = data.trips;
+            renderDashboard(allTrips);
+            renderExtraCharts(allTrips);
+            return;
+        }
+    } catch (err) {
+        console.warn('API fetch failed, trying original endpoint:', err);
+    }
+
+    fetchTrips();
+}
+
+initDashboard();

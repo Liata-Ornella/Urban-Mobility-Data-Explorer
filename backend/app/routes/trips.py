@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-from flask.scaffold import F
 from app.models import db, Trip, Zone
 from sqlalchemy import func, desc
 from datetime import datetime

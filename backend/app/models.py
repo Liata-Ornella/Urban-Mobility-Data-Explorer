@@ -64,13 +64,17 @@ class Trip(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'vendor_id': self.vendor_id,
             'pickup_datetime': self.pickup_datetime.isoformat() if self.pickup_datetime else None,
             'dropoff_datetime': self.dropoff_datetime.isoformat() if self.dropoff_datetime else None,
             'passenger_count': self.passenger_count,
             'trip_distance': self.trip_distance,
             'pulocation_id': self.pulocation_id,
             'dolocation_id': self.dolocation_id,
+            'payment_type': self.payment_type,
             'fare_amount': self.fare_amount,
+            'tip_amount': self.tip_amount,
+            'tolls_amount': self.tolls_amount,
             'total_amount': self.total_amount,
             'trip_duration_minutes': self.trip_duration_minutes,
             'trip_speed_mph': self.trip_speed_mph,
