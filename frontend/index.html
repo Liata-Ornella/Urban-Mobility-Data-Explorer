@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Urban Mobility Explorer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header class="dashboard-header">
+    <h1>Urban Mobility Explorer</h1>
+    <p>New York City Taxi Trip Insights</p>
+</header>
+
+<section class="control-bar">
+
+    <div class="control-group">
+        <label for="vendorSelect">Vendor</label>
+        <select id="vendorSelect">
+            <option value="all">All Vendors</option>
+            <option value="1">Vendor 1</option>
+            <option value="2">Vendor 2</option>
+        </select>
+    </div>
+
+    <div class="control-group">
+        <label for="passengerSelect">Passengers</label>
+        <select id="passengerSelect">
+            <option value="all">All</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6+</option>
+        </select>
+    </div>
+
+    <div class="control-group">
+        <label for="startDate">Start Date</label>
+        <input type="date" id="startDate">
+    </div>
+
+    <div class="control-group">
+        <label for="endDate">End Date</label>
+        <input type="date" id="endDate">
+    </div>
+
+    <div class="control-actions">
+        <button id="applyFiltersBtn" class="btn-primary">Apply Filters</button>
+        <button id="exportCsvBtn" class="btn-secondary">Export CSV</button>
+    </div>
+
+</section>
+
+<section class="summary-metrics">
+
+    <div class="summary-card">
+        <h3>Total Trips</h3>
+        <p id="metricTotalTrips">0</p>
+    </div>
+
+    <div class="summary-card">
+        <h3>Average Speed (km/h)</h3>
+        <p id="metricAvgSpeed">0</p>
+    </div>
+
+    <div class="summary-card">
+        <h3>Average Duration (min)</h3>
+        <p id="metricAvgDuration">0</p>
+    </div>
+
+    <div class="summary-card">
+        <h3>Average Distance (km)</h3>
+        <p id="metricAvgDistance">0</p>
+    </div>
+
+</section>
+
+<section class="insights-grid">
+
+    <div class="insight-panel">
+        <h2>Speed Distribution</h2>
+        <canvas id="speedChartCanvas"></canvas>
+    </div>
+
+    <div class="insight-panel">
+        <h2>Trip Duration Overview</h2>
+        <canvas id="durationChartCanvas"></canvas>
+    </div>
+
+    <div class="insight-panel wide">
+        <h2>Speed vs Distance Relationship</h2>
+        <canvas id="speedDistanceChartCanvas"></canvas>
+    </div>
+
+</section>
+
+<section class="data-section">
+    <h2>Longest Trips</h2>
+    <table id="longestTripsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Duration</th>
+                <th>Distance</th>
+                <th>Speed</th>
+                <th>Passengers</th>
+                <th>Vendor</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <p id="emptyStateMessage" class="empty-state" style="display:none;">
+        No trips match the selected filters.
+    </p>
+</section>
+
+<script src="js/main.js"></script>
+</body>
+</html>
