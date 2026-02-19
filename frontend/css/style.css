@@ -355,6 +355,9 @@ select, input[type="date"] {
 
 .insight-panel.wide { grid-column: span 2; }
 
+.insight-panel canvas { max-height: 280px; }
+.insight-panel.wide canvas { max-height: 320px; }
+
 .insight-panel h2 {
     font-size: 0.85rem;
     font-weight: 600;
@@ -588,4 +591,7 @@ tbody tr:hover td { color: var(--text); }
     .summary-metrics { grid-template-columns: 1fr; }
     .topbar { flex-direction: column; gap: 0.5rem; }
     .hero-title { font-size: 1.8rem; }
+}
+.insights-grid a {
+    display: none;
 }
